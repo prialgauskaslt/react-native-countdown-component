@@ -59,22 +59,15 @@ class CountDown extends React.Component {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.until !== prevProps.until || this.props.id !== prevProps.id) {
+  shouldComponentUpdate(nextProps) {
+    if (this.props.until !== nextProps.until || this.props.id !== nextProps.id) {
       this.setState({
-        lastUntil: prevState.until,
-        until: Math.max(prevProps.until, 0)
+        lastUntil: this.state.until,
+        until: Math.max(nextProps.until, 0)
       });
     }
+    return true
   }
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props.until !== nextProps.until || this.props.id !== nextProps.id) {
-  //     this.setState({
-  //       lastUntil: this.state.until,
-  //       until: Math.max(nextProps.until, 0)
-  //     });
-  //   }
-  // }
 
   _handleAppStateChange = currentAppState => {
     const {until, wentBackgroundAt} = this.state;
@@ -133,61 +126,61 @@ class CountDown extends React.Component {
   renderDigit = (d) => {
     const {digitStyle, digitTxtStyle, size} = this.props;
     return (
-      <View style={[
-        styles.digitCont,        
-        {width: size * 2.3, height: size * 2.6},
-        digitStyle,
-      ]}>
-        <Text style={[
+        <View style={[
+          styles.digitCont,
+    {width: size * 2.3, height: size * 2.6},
+    digitStyle,
+  ]}>
+  <Text style={[
           styles.digitTxt,
-          {fontSize: size},
-          digitTxtStyle,
-        ]}>
-          {d}
-        </Text>
-      </View>
-    );
+    {fontSize: size},
+    digitTxtStyle,
+  ]}>
+    {d}
+  </Text>
+    </View>
+  );
   };
 
   renderLabel = label => {
     const {timeLabelStyle, size} = this.props;
     if (label) {
       return (
-        <Text style={[
-          styles.timeTxt,
-          {fontSize: size / 1.8},
-          timeLabelStyle,
-        ]}>
-          {label}
-        </Text>
-      );
+          <Text style={[
+            styles.timeTxt,
+      {fontSize: size / 1.8},
+      timeLabelStyle,
+    ]}>
+      {label}
+    </Text>
+    );
     }
   };
 
   renderDoubleDigits = (label, digits) => {
     return (
-      <View style={styles.doubleDigitCont}>
+        <View style={styles.doubleDigitCont}>
         <View style={styles.timeInnerCont}>
-          {this.renderDigit(digits)}
+        {this.renderDigit(digits)}
         </View>
-        {this.renderLabel(label)}
-      </View>
-    );
+    {this.renderLabel(label)}
+  </View>
+  );
   };
 
   renderSeparator = () => {
     const {separatorStyle, size} = this.props;
     return (
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={[
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+  <Text style={[
           styles.separatorTxt,
-          {fontSize: size * 1.2},
-          separatorStyle,
-        ]}>
-          {':'}
-        </Text>
-      </View>
-    );
+    {fontSize: size * 1.2},
+    separatorStyle,
+  ]}>
+    {':'}
+  </Text>
+    </View>
+  );
   };
 
   renderCountDown = () => {
@@ -198,27 +191,27 @@ class CountDown extends React.Component {
     const Component = this.props.onPress ? TouchableOpacity : View;
 
     return (
-      <Component
-        style={styles.timeCont}
-        onPress={this.props.onPress}
-      >
+        <Component
+    style={styles.timeCont}
+    onPress={this.props.onPress}
+        >
         {timeToShow.includes('D') ? this.renderDoubleDigits(timeLabels.d, newTime[0]) : null}
-        {showSeparator && timeToShow.includes('D') && timeToShow.includes('H') ? this.renderSeparator() : null}
-        {timeToShow.includes('H') ? this.renderDoubleDigits(timeLabels.h, newTime[1]) : null}
-        {showSeparator && timeToShow.includes('H') && timeToShow.includes('M') ? this.renderSeparator() : null}
-        {timeToShow.includes('M') ? this.renderDoubleDigits(timeLabels.m, newTime[2]) : null}
-        {showSeparator && timeToShow.includes('M') && timeToShow.includes('S') ? this.renderSeparator() : null}
-        {timeToShow.includes('S') ? this.renderDoubleDigits(timeLabels.s, newTime[3]) : null}
-      </Component>
-    );
+    {showSeparator && timeToShow.includes('D') && timeToShow.includes('H') ? this.renderSeparator() : null}
+    {timeToShow.includes('H') ? this.renderDoubleDigits(timeLabels.h, newTime[1]) : null}
+    {showSeparator && timeToShow.includes('H') && timeToShow.includes('M') ? this.renderSeparator() : null}
+    {timeToShow.includes('M') ? this.renderDoubleDigits(timeLabels.m, newTime[2]) : null}
+    {showSeparator && timeToShow.includes('M') && timeToShow.includes('S') ? this.renderSeparator() : null}
+    {timeToShow.includes('S') ? this.renderDoubleDigits(timeLabels.s, newTime[3]) : null}
+  </Component>
+  );
   };
 
   render() {
     return (
-      <View style={this.props.style}>
+        <View style={this.props.style}>
         {this.renderCountDown()}
-      </View>
-    );
+        </View>
+  );
   }
 }
 
